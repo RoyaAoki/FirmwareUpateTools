@@ -24,7 +24,7 @@ namespace FirmwareUpateTools.ViewModel
         {
             get
             {
-                if (DownloadFilePath != "")
+                if (DownloadFilePath != "" && DeviceList.Count > 0)
                     return "True";
                 else
                     return "False";
@@ -66,13 +66,17 @@ namespace FirmwareUpateTools.ViewModel
                 sTDFU.Refresh();
                 OnPropertyChanged("DeviceList");
                 OnPropertyChanged("CurrentIndex");
+                OnPropertyChanged("DownloadButtonEnable");
                 MaybeAutoDownload();
             }
             else
             {
                 sTDFU.Refresh();
+                if (DeviceList.Count <= 0) { CurrentIndex = -1;  }
                 OnPropertyChanged("DeviceList");
                 OnPropertyChanged("CurrentIndex");
+                OnPropertyChanged("DownloadButtonEnable");
+                CurrentIndex = 0;
             }
         }
 
@@ -124,6 +128,10 @@ namespace FirmwareUpateTools.ViewModel
             if(DownloadFilePath == "")
             {
                 MessageBox.Show("请先选择固件文件");
+            }
+            else if(DeviceList.Count <= 0)
+            {
+                MessageBox.Show("找不到设备");
             }
             else
             {
